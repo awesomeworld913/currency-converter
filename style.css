@@ -360,6 +360,98 @@ header h1 {
   margin-top: 0.25rem;
 }
 
+/* Calculator Card */
+.calc-card {
+  background: white;
+  border-radius: 16px;
+  padding: 1.5rem;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+  margin-top: 1.5rem;
+  max-width: 360px;
+}
+
+.calc-card h2 {
+  font-size: 1rem;
+  font-weight: 600;
+  color: #2d3748;
+  margin-bottom: 1rem;
+}
+
+.calc-display {
+  background: #1a202c;
+  color: #fff;
+  font-size: 2rem;
+  font-weight: 700;
+  text-align: right;
+  padding: 0.75rem 1rem;
+  border-radius: 10px;
+  margin-bottom: 0.75rem;
+  min-height: 3.2rem;
+  overflow-x: auto;
+  white-space: nowrap;
+  font-family: 'SF Mono', 'Fira Code', monospace;
+}
+
+.calc-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 0.5rem;
+}
+
+.calc-btn {
+  padding: 0.85rem;
+  border: 1.5px solid #e2e8f0;
+  border-radius: 10px;
+  background: #f7fafc;
+  font-size: 1.15rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.15s, transform 0.1s;
+  color: #2d3748;
+}
+
+.calc-btn:hover {
+  background: #edf2f7;
+  transform: scale(1.04);
+}
+
+.calc-btn:active {
+  transform: scale(0.96);
+}
+
+.calc-fn {
+  background: #e2e8f0;
+  color: #2d3748;
+}
+
+.calc-fn:hover {
+  background: #cbd5e0;
+}
+
+.calc-op {
+  background: #4299e1;
+  color: white;
+  border-color: #4299e1;
+}
+
+.calc-op:hover {
+  background: #3182ce;
+}
+
+.calc-eq {
+  background: #48bb78;
+  color: white;
+  border-color: #48bb78;
+}
+
+.calc-eq:hover {
+  background: #38a169;
+}
+
+.calc-zero {
+  grid-column: span 2;
+}
+
 /* Responsive */
 @media (max-width: 640px) {
   .converter-row {
