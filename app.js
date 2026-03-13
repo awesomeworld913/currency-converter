@@ -258,69 +258,6 @@ document.querySelectorAll('.tab').forEach(tab => {
   });
 });
 
-// ── Calculator ──────────────────────────────────────────────────────────────
-const calcDisplay = document.getElementById('calc-display');
-let calcCurrent = '0';
-let calcPrev = '';
-let calcOp = '';
-let calcReset = false;
-
-function updateCalcDisplay() {
-  calcDisplay.textContent = calcCurrent;
-}
-
-document.querySelectorAll('.calc-btn').forEach(btn => {
-  btn.addEventListener('click', () => {
-    const action = btn.dataset.action;
-
-    if (action >= '0' && action <= '9') {
-      if (calcCurrent === '0' || calcReset) {
-        calcCurrent = action;
-        calcReset = false;
-      } else {
-        calcCurrent += action;
-      }
-    } else if (action === '.') {
-      if (calcReset) { calcCurrent = '0'; calcReset = false; }
-      if (!calcCurrent.includes('.')) calcCurrent += '.';
-    } else if (action === 'clear') {
-      calcCurrent = '0';
-      calcPrev = '';
-      calcOp = '';
-    } else if (action === 'backspace') {
-      calcCurrent = calcCurrent.length > 1 ? calcCurrent.slice(0, -1) : '0';
-    } else if (action === 'percent') {
-      calcCurrent = String(parseFloat(calcCurrent) / 100);
-    } else if (['+', '-', '*', '/'].includes(action)) {
-      if (calcPrev && calcOp && !calcReset) {
-        calcCurrent = String(evaluate(parseFloat(calcPrev), parseFloat(calcCurrent), calcOp));
-      }
-      calcPrev = calcCurrent;
-      calcOp = action;
-      calcReset = true;
-    } else if (action === '=') {
-      if (calcPrev && calcOp) {
-        calcCurrent = String(evaluate(parseFloat(calcPrev), parseFloat(calcCurrent), calcOp));
-        calcPrev = '';
-        calcOp = '';
-        calcReset = true;
-      }
-    }
-
-    updateCalcDisplay();
-  });
-});
-
-function evaluate(a, b, op) {
-  switch (op) {
-    case '+': return a + b;
-    case '-': return a - b;
-    case '*': return a * b;
-    case '/': return b !== 0 ? parseFloat((a / b).toPrecision(12)) : 'Error';
-    default: return b;
-  }
-}
-
 // ── Timezone Clock ──────────────────────────────────────────────────────────
 const CURRENCY_TIMEZONES = {
   USD: { zone: 'America/New_York',    label: '🇺🇸 미국 (뉴욕)' },
