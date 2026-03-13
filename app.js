@@ -258,6 +258,97 @@ document.querySelectorAll('.tab').forEach(tab => {
   });
 });
 
+// ── Timezone Clock ──────────────────────────────────────────────────────────
+const CURRENCY_TIMEZONES = {
+  USD: { zone: 'America/New_York',    label: '🇺🇸 미국 (뉴욕)' },
+  KRW: { zone: 'Asia/Seoul',          label: '🇰🇷 한국 (서울)' },
+  EUR: { zone: 'Europe/Berlin',       label: '🇪🇺 유럽 (베를린)' },
+  JPY: { zone: 'Asia/Tokyo',          label: '🇯🇵 일본 (도쿄)' },
+  GBP: { zone: 'Europe/London',       label: '🇬🇧 영국 (런던)' },
+  CNY: { zone: 'Asia/Shanghai',       label: '🇨🇳 중국 (상하이)' },
+  CAD: { zone: 'America/Toronto',     label: '🇨🇦 캐나다 (토론토)' },
+  AUD: { zone: 'Australia/Sydney',    label: '🇦🇺 호주 (시드니)' },
+  CHF: { zone: 'Europe/Zurich',       label: '🇨🇭 스위스 (취리히)' },
+  HKD: { zone: 'Asia/Hong_Kong',      label: '🇭🇰 홍콩' },
+  SGD: { zone: 'Asia/Singapore',      label: '🇸🇬 싱가포르' },
+  SEK: { zone: 'Europe/Stockholm',    label: '🇸🇪 스웨덴 (스톡홀름)' },
+  NOK: { zone: 'Europe/Oslo',         label: '🇳🇴 노르웨이 (오슬로)' },
+  MXN: { zone: 'America/Mexico_City', label: '🇲🇽 멕시코 (멕시코시티)' },
+  INR: { zone: 'Asia/Kolkata',        label: '🇮🇳 인도 (콜카타)' },
+  BRL: { zone: 'America/Sao_Paulo',   label: '🇧🇷 브라질 (상파울루)' },
+  ZAR: { zone: 'Africa/Johannesburg', label: '🇿🇦 남아공 (요하네스버그)' },
+  TRY: { zone: 'Europe/Istanbul',     label: '🇹🇷 튀르키예 (이스탄불)' },
+  NZD: { zone: 'Pacific/Auckland',    label: '🇳🇿 뉴질랜드 (오클랜드)' },
+  THB: { zone: 'Asia/Bangkok',        label: '🇹🇭 태국 (방콕)' },
+};
+
+const timezoneGrid = document.getElementById('timezone-grid');
+
+function getSelectedZones() {
+  const from = fromCurrencyEl.value;
+  const to = toCurrencyEl.value;
+  // Show selected pair first, then remaining popular ones
+  const selected = [from, to];
+  const others = POPULAR.filter(c => c !== from && c !== to);
+  return [...selected, ...others].filter(c => CURRENCY_TIMEZONES[c]);
+}
+
+function renderTimezones() {
+  const zones = getSelectedZones();
+  const now = new Date();
+  const localOffset = now.getTimezoneOffset();
+
+  timezoneGrid.innerHTML = '';
+
+  zones.forEach(code => {
+    const tz = CURRENCY_TIMEZONES[code];
+    if (!tz) return;
+
+    const timeStr = now.toLocaleTimeString('ko-KR', {
+      timeZone: tz.zone,
+      hour: '2-digit',
+      minute: '2-digit',
+      second: '2-digit',
+      hour12: false,
+    });
+
+    const dateStr = now.toLocaleDateString('ko-KR', {
+      timeZone: tz.zone,
+      month: 'short',
+      day: 'numeric',
+      weekday: 'short',
+    });
+
+    // Calculate offset difference from local
+    const utcNow = now.getTime() + localOffset * 60000;
+    const targetTime = new Date(now.toLocaleString('en-US', { timeZone: tz.zone }));
+    const localTime = new Date(now.toLocaleString('en-US', { timeZone: Intl.DateTimeFormat().resolvedOptions().timeZone }));
+    const diffHours = (targetTime - localTime) / 3600000;
+    const sign = diffHours >= 0 ? '+' : '';
+    const diffLabel = diffHours === 0 ? '현지 시간' : `${sign}${diffHours}시간`;
+
+    const isActive = code === fromCurrencyEl.value || code === toCurrencyEl.value;
+
+    const div = document.createElement('div');
+    div.className = `tz-item${isActive ? ' tz-active' : ''}`;
+    div.innerHTML = `
+      <span class="tz-country">${tz.label}</span>
+      <span class="tz-time">${timeStr}</span>
+      <span class="tz-date">${dateStr}</span>
+      <span class="tz-diff">${diffLabel}</span>
+    `;
+    timezoneGrid.appendChild(div);
+  });
+}
+
+// Update clocks every second
+setInterval(renderTimezones, 1000);
+
+// Re-render when currency changes
+fromCurrencyEl.addEventListener('change', renderTimezones);
+toCurrencyEl.addEventListener('change', renderTimezones);
+
 // ── Init ─────────────────────────────────────────────────────────────────────
 loadCurrencies();
 renderFavorites();
+renderTimezones();

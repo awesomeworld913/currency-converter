@@ -295,6 +295,71 @@ header h1 {
   color: #e53e3e;
 }
 
+/* Timezone Card */
+.timezone-card {
+  background: white;
+  border-radius: 16px;
+  padding: 1.5rem;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+  margin-top: 1.5rem;
+}
+
+.timezone-card h2 {
+  font-size: 1rem;
+  font-weight: 600;
+  color: #2d3748;
+  margin-bottom: 1rem;
+}
+
+.timezone-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 0.75rem;
+}
+
+.tz-item {
+  display: flex;
+  flex-direction: column;
+  padding: 0.75rem 1rem;
+  border: 1.5px solid #e2e8f0;
+  border-radius: 10px;
+  transition: background 0.2s, border-color 0.2s;
+}
+
+.tz-item:hover {
+  background: #ebf8ff;
+  border-color: #90cdf4;
+}
+
+.tz-item.tz-active {
+  background: #ebf8ff;
+  border-color: #4299e1;
+}
+
+.tz-country {
+  font-size: 0.8rem;
+  color: #718096;
+  margin-bottom: 0.2rem;
+}
+
+.tz-time {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: #2d3748;
+}
+
+.tz-date {
+  font-size: 0.75rem;
+  color: #a0aec0;
+  margin-top: 0.15rem;
+}
+
+.tz-diff {
+  font-size: 0.7rem;
+  color: #4299e1;
+  margin-top: 0.25rem;
+}
+
 /* Responsive */
 @media (max-width: 640px) {
   .converter-row {
